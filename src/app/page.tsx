@@ -2,6 +2,7 @@ import SignIn from '@/components/Sign-In';
 import Image from 'next/image';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
+import Link from 'next/link';
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -57,6 +58,9 @@ export default async function Home() {
         </div>
         <SignIn />
         <p>{session?.user?.email}</p>
+        <Link href="/challenges" className="text-blue-500 hover:underline mt-4 block">
+          Go to Challenges
+        </Link>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
