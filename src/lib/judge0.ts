@@ -1,5 +1,5 @@
 export default async function judge0(code: string) {
-  const response = await fetch(process.env.JUDGE0_URL as string, {
+  const response = await fetch(`http://${process.env.JUDGE0_URL as string}/submissions?wait=true`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
