@@ -32,10 +32,10 @@ export default function Challenges({
             <>
               <TableHeader className="w-full">
                 <TableRow className="w-full">
-                  <TableHead className="w-[40%]">Title</TableHead>
-                  <TableHead className="w-[40%]">Description</TableHead>
-                  <TableHead className="w-[40%]">Level</TableHead>
-                  <TableHead className="w-[40%]">Created</TableHead>
+                  <TableHead className="w-[25%]">Title</TableHead>
+                  <TableHead className="w-[25%]">Description</TableHead>
+                  <TableHead className="w-[25%]">Level</TableHead>
+                  <TableHead className="w-[25%]">Created</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -56,16 +56,16 @@ export default function Challenges({
                       legacyBehavior
                     >
                       <TableRow className="cursor-pointer">
-                        <TableCell className="w-[40%]">
+                        <TableCell className="w-[25%]">
                           {challenge.title}
                         </TableCell>
-                        <TableCell className="w-[40%]">
+                        <TableCell className="w-[25%]">
                           {challenge.description}
                         </TableCell>
-                        <TableCell className="w-[40%]">
+                        <TableCell className="w-[25%]">
                           {levelDescription}
                         </TableCell>
-                        <TableCell className="w-[40%]">
+                        <TableCell className="w-[25%]">
                           {createdAtResult}
                         </TableCell>
                       </TableRow>
