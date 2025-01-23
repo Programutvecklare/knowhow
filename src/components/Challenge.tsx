@@ -10,11 +10,11 @@ import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
+import type { Challenge } from '@prisma/client'
+import getLevelDescription  from '@/lib/level';
 
-export default function Challenge() {
-  const [code, setCode] = useState(`function reverse(str) {
-    // Your code here
-}`)
+export default  function Challenge(challenge: Challenge){
+  const [code, setCode] = useState(`${challenge.boilerplate}`)
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
 
@@ -52,21 +52,14 @@ export default function Challenge() {
       <ResizablePanel defaultSize={50}>
         <div className="container mx-auto p-6">
           <div className="flex items-center gap-2 text-3xl font-bold mb-6">
-            Reverse a String
-            <Badge>Easy</Badge>
+            {challenge.title}
+            <Badge>{getLevelDescription(challenge.level)}</Badge>
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold mb-2">Instructions:</h2>
+            <h2 className="text-xl font-semibold mb-2">Description:</h2>
             <div>
-              Write a function that takes a string as input and returns the
-              reverse of that string.
-              <ul className="list-disc pl-5">
-                <li>
-                  If the input is &quot;hello&quot;, the output should be
-                  &quot;olleh&quot;.
-                </li>
-              </ul>
+            {challenge.description}
             </div>
           </div>
 
@@ -82,12 +75,7 @@ export default function Challenge() {
             {showTips && (
               <ul className="list-disc pl-5">
                 <li>
-                  You can convert a string to an array of characters using the
-                  spread operator [...str] or the split() method.
-                </li>
-                <li>
-                  Arrays have methods like reverse() and join() that might be
-                  useful.
+                {challenge.tips}
                 </li>
               </ul>
             )}

@@ -77,4 +77,5 @@ model Challenge {
   updatedAt   DateTime @default(now()) @updatedAt
   userId      String?
   User        User?    @relation(fields: [userId], references: [id])
+  tips        String?
 }
