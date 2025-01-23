@@ -1,7 +1,7 @@
 'use client'
-import Github from './ui/github'
 import { authClient } from '@/lib/auth-client'
-import { Button } from '@/components/ui/button'
+import { Button } from './ui/button'
+import Github from './ui/github'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function LoginPage() {
