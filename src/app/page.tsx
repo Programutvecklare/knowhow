@@ -57,7 +57,10 @@ export default async function Home() {
             Read our docs
           </a>
         </div>
-        <Link href="/challenges" className="text-blue-500 hover:underline mt-4 block">
+        <Link
+          href="/challenges"
+          className="text-blue-500 hover:underline mt-4 block"
+        >
           Go to Challenges
         </Link>
         {!session && (

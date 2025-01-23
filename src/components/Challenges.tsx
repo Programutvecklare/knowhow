@@ -10,6 +10,7 @@ import {
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import getLevelDescription from '@/lib/level'
+import { Button } from './ui/button'
 
 export default function Challenges({
   challenges,
@@ -20,6 +21,9 @@ export default function Challenges({
     <div className="p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl">Challenges</h1>
+        <Button asChild>
+          <Link href={'/challenges/new'}>New Challenge</Link>
+        </Button>
       </div>
 
       <div className="p-6 mt-4 border-[1px] rounded-md border-[E2E8F0]">
