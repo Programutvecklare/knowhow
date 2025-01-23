@@ -9,6 +9,7 @@
     "lint": "next lint",
     "db:generate": "npx prisma generate",
     "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio",
     "docker": "docker-compose up -d"
   },
   "dependencies": {
