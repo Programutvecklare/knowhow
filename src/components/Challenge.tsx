@@ -6,6 +6,7 @@ import {
   ResizablePanelGroup,
 } from '@/components/ui/resizable'
 import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
@@ -60,26 +61,39 @@ export default function Challenge(challenge: Challenge) {
               <Badge>{getLevelDescription(challenge.level)}</Badge>
             </div>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2">Instructions:</h2>
-              <div>{challenge.description}</div>
-            </div>
+            <Tabs defaultValue="instructions" className="w-full">
+              <TabsList className="w-full">
+                <TabsTrigger className="w-full" value="instructions">
+                  Instructions
+                </TabsTrigger>
+                <TabsTrigger className="w-full" value="solutions">
+                  Solutions
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="instructions">
+                <div>
+                  <h2 className="text-xl font-semibold mb-2">Instructions:</h2>
+                  <div>{challenge.description}</div>
+                </div>
 
-            <div>
-              <h2 className="text-xl font-semibold mb-2 mt-6">Tips:</h2>
-              <Button
-                size="sm"
-                onClick={() => setShowTips(!showTips)}
-                className="mb-2 "
-              >
-                {showTips ? 'Hide Tips' : 'Show Tips'}
-              </Button>
-              {showTips && (
-                <ul className="list-disc pl-5">
-                  <li>{challenge.tips}</li>
-                </ul>
-              )}
-            </div>
+                <div>
+                  <h2 className="text-xl font-semibold mb-2 mt-6">Tips:</h2>
+                  <Button
+                    size="sm"
+                    onClick={() => setShowTips(!showTips)}
+                    className="mb-2 "
+                  >
+                    {showTips ? 'Hide Tips' : 'Show Tips'}
+                  </Button>
+                  {showTips && (
+                    <ul className="list-disc pl-5">
+                      <li>{challenge.tips}</li>
+                    </ul>
+                  )}
+                </div>
+              </TabsContent>
+              <TabsContent value="solutions">Solutions</TabsContent>
+            </Tabs>
           </div>
         </ResizablePanel>
         <ResizableHandle />
