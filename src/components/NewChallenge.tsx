@@ -15,8 +15,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode'
+import { githubLight } from '@uiw/codemirror-theme-github'
+import { useTheme } from 'next-themes'
 
 export default function CreateChallenge() {
+  const { resolvedTheme } = useTheme()
   const [title, setTitle] = useState('')
   const [instructions, setInstructions] = useState('')
   const [difficulty, setDifficulty] = useState('')
@@ -83,6 +87,7 @@ export default function CreateChallenge() {
                 extensions={[javascript()]}
                 placeholder="Enter tests"
                 className="border rounded-lg w-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
 
@@ -95,6 +100,7 @@ export default function CreateChallenge() {
                 extensions={[javascript()]}
                 placeholder="Enter boilerplate code"
                 className="border rounded-lg w-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
             <Button type="submit" className="w-full">
