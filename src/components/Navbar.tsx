@@ -21,9 +21,11 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
+import { Skeleton } from './ui/skeleton'
 
 export default function Navbar() {
-  const { data: session } = authClient.useSession()
+  const { data: session, isPending } = authClient.useSession()
+
   const router = useRouter()
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -34,7 +36,6 @@ export default function Navbar() {
       },
     })
   }
-
   return (
     <nav className="sticky top-0 z-50 border-b bg-white dark:bg-black h-16">
       <div className="max-w-7xl mx-auto px-4">
@@ -58,7 +59,9 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
           <div className="flex items-center">
-            {session ? (
+            {isPending ? (
+              <Skeleton className="relative size-10 rounded-full" />
+            ) : session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
