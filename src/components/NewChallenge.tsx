@@ -15,22 +15,52 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { newChallenge } from '@/data/challenges/new-challenge'
+import { useRouter } from "next/navigation";
+import { vscodeDark } from '@uiw/codemirror-theme-vscode'
+import { githubLight } from '@uiw/codemirror-theme-github'
+import { useTheme } from 'next-themes'
 
 export default function CreateChallenge() {
+  const { resolvedTheme } = useTheme()
   const [title, setTitle] = useState('')
   const [instructions, setInstructions] = useState('')
   const [difficulty, setDifficulty] = useState('')
   const [tests, setTests] = useState('')
   const [boilerplate, setBoilerplate] = useState('')
+  const [tips, setTips] = useState('')
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log({ title, instructions, difficulty, tests, boilerplate })
-  }
+  const handleSubmit = async () => {
+    if (isLoading) return 
+    setIsLoading(true)
+    
+    try {
+      const createdChallengeId = await newChallenge({
+        title,
+        description: instructions,
+        level: parseInt(difficulty, 10),
+        tests,
+        boilerplate,
+        tips,
+      });
+
+      router.push(`/challenges/${createdChallengeId}`);
+      router.refresh();
+    } catch (error) {
+      console.error('Error creating challenge:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}>
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>New Challenge</CardTitle>
@@ -75,6 +105,18 @@ export default function CreateChallenge() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="tips">Tips</Label>
+
+              <ReactCodeMirror
+                value={tips}
+                onChange={setTips}
+                extensions={[javascript()]}
+                placeholder="Enter your tips or code"
+                className="border rounded-lg w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="tests">Tests</Label>
 
               <ReactCodeMirror
@@ -83,6 +125,7 @@ export default function CreateChallenge() {
                 extensions={[javascript()]}
                 placeholder="Enter tests"
                 className="border rounded-lg w-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
 
@@ -95,10 +138,14 @@ export default function CreateChallenge() {
                 extensions={[javascript()]}
                 placeholder="Enter boilerplate code"
                 className="border rounded-lg w-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
-            <Button type="submit" className="w-full">
-              Create Challenge
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading}>
+                 {isLoading ? 'Creating...' : 'Create Challenge'}
             </Button>
           </CardContent>
         </Card>
