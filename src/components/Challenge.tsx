@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -10,11 +10,14 @@ import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
+import { vscodeDark } from '@uiw/codemirror-theme-vscode'
+import { githubLight } from '@uiw/codemirror-theme-github'
 import submitTest from '@/data/challenges/submitTest'
-import type { Challenge } from '@prisma/client'
 import getLevelDescription from '@/lib/level'
+import { useTheme } from 'next-themes'
 
 export default function Challenge(challenge: Challenge) {
+  const { resolvedTheme } = useTheme()
   const [code, setCode] = useState(`${challenge.boilerplate}`)
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
@@ -86,15 +89,14 @@ export default function Challenge(challenge: Challenge) {
         <ResizablePanel defaultSize={50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={75}>
-              <div className="flex items-center justify-center p-6">
-                <ReactCodeMirror
-                  value={code}
-                  onChange={setCode}
-                  extensions={[javascript()]}
-                  placeholder="Please enter JS code."
-                  className="w-full h-full"
-                />
-              </div>
+              <ReactCodeMirror
+                value={code}
+                onChange={setCode}
+                extensions={[javascript()]}
+                placeholder="Please enter JS code."
+                className="w-full h-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
+              />
             </ResizablePanel>
             <ResizableHandle />
             <ResizablePanel defaultSize={25} className="flex ">
@@ -123,9 +125,7 @@ export default function Challenge(challenge: Challenge) {
                     )}
                   </i>
                 </div>
-                <Button onClick={runTests} className="bg-black text-white">
-                  Run
-                </Button>
+                <Button onClick={runTests}>Run</Button>
               </div>
             </ResizablePanel>
           </ResizablePanelGroup>
