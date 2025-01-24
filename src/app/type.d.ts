@@ -7,4 +7,5 @@ type Challenge = {
     updatedAt: Date;
     userId: string | null;
     boilerplate: string | null;
+    tips: string | null;
 }
