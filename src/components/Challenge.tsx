@@ -78,9 +78,10 @@ export default function Challenge(challenge: Challenge) {
                   <h2 className="text-xl font-semibold mb-2">Instructions:</h2>
                   <div>{challenge.description}</div>
                 </div>
-
+              </TabsContent>
+              <TabsContent value="solutions">
                 <div>
-                  <h2 className="text-xl font-semibold mb-2 mt-6">Tips:</h2>
+                  <h2 className="text-xl font-semibold mb-2">Tips:</h2>
                   <Button
                     size="sm"
                     onClick={() => setShowTips(!showTips)}
@@ -95,7 +96,6 @@ export default function Challenge(challenge: Challenge) {
                   )}
                 </div>
               </TabsContent>
-              <TabsContent value="solutions">Solutions</TabsContent>
             </Tabs>
           </div>
         </ResizablePanel>
