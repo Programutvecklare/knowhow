@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
+import submitTest from '@/data/challenges/submitTest'
 
 export default function Challenge() {
   const [code, setCode] = useState(`function reverse(str) {
@@ -18,7 +19,9 @@ export default function Challenge() {
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
 
-  const runTests = () => {
+  const runTests = async () => {
+    const judge0test = await submitTest(code)
+    console.log(judge0test)
     const tests = [
       { input: 'hello', expected: 'olleh' },
       { input: 'world', expected: 'dlrow' },
