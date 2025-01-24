@@ -5,4 +5,5 @@
 
 */
 -- AlterTable
-ALTER TABLE "Challenge" DROP COLUMN "test";
+ALTER TABLE "Challenge" DROP COLUMN "test",
+ADD COLUMN     "tips" TEXT;

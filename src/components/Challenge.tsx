@@ -11,11 +11,11 @@ import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import submitTest from '@/data/challenges/submitTest'
+import type { Challenge } from '@prisma/client'
+import getLevelDescription from '@/lib/level'
 
-export default function Challenge() {
-  const [code, setCode] = useState(`function reverse(str) {
-    // Your code here
-}`)
+export default function Challenge(challenge: Challenge) {
+  const [code, setCode] = useState(`${challenge.boilerplate}`)
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
 
@@ -56,22 +56,13 @@ export default function Challenge() {
         <ResizablePanel defaultSize={50}>
           <div className="container mx-auto p-6">
             <div className="flex items-center gap-2 text-3xl font-bold mb-6">
-              Reverse a String
-              <Badge>Easy</Badge>
+              {challenge.title}
+              <Badge>{getLevelDescription(challenge.level)}</Badge>
             </div>
 
             <div>
               <h2 className="text-xl font-semibold mb-2">Instructions:</h2>
-              <div>
-                Write a function that takes a string as input and returns the
-                reverse of that string.
-                <ul className="list-disc pl-5">
-                  <li>
-                    If the input is &quot;hello&quot;, the output should be
-                    &quot;olleh&quot;.
-                  </li>
-                </ul>
-              </div>
+              <div>{challenge.description}</div>
             </div>
 
             <div>
@@ -85,14 +76,7 @@ export default function Challenge() {
               </Button>
               {showTips && (
                 <ul className="list-disc pl-5">
-                  <li>
-                    You can convert a string to an array of characters using the
-                    spread operator [...str] or the split() method.
-                  </li>
-                  <li>
-                    Arrays have methods like reverse() and join() that might be
-                    useful.
-                  </li>
+                  <li>{challenge.tips}</li>
                 </ul>
               )}
             </div>
@@ -102,16 +86,17 @@ export default function Challenge() {
         <ResizablePanel defaultSize={50}>
           <ResizablePanelGroup direction="vertical">
             <ResizablePanel defaultSize={75}>
-              <ReactCodeMirror
-                value={code}
-                onChange={setCode}
-                extensions={[javascript()]}
-                placeholder="Please enter JS code."
-                className="w-full h-full"
-              />
+              <div className="flex items-center justify-center p-6">
+                <ReactCodeMirror
+                  value={code}
+                  onChange={setCode}
+                  extensions={[javascript()]}
+                  placeholder="Please enter JS code."
+                  className="w-full h-full"
+                />
+              </div>
             </ResizablePanel>
             <ResizableHandle />
-
             <ResizablePanel defaultSize={25} className="flex ">
               <div className="h-full w-full flex p-2 tracking-wide flex-col">
                 <span className="pl-2">Console</span>
