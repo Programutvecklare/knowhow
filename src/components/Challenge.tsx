@@ -15,6 +15,7 @@ import { githubLight } from '@uiw/codemirror-theme-github'
 import submitTest from '@/data/challenges/submitTest'
 import getLevelDescription from '@/lib/level'
 import { useTheme } from 'next-themes'
+import { describe, test, expect } from '@/utils/testUtils'
 
 export default function Challenge(challenge: Challenge) {
   const { resolvedTheme } = useTheme()
@@ -23,31 +24,35 @@ export default function Challenge(challenge: Challenge) {
   const [testResults, setTestResults] = useState<string[]>([])
 
   const runTests = async () => {
-    const judge0test = await submitTest(code)
-    console.log(judge0test)
-    const tests = [
-      { input: 'hello', expected: 'olleh' },
-      { input: 'world', expected: 'dlrow' },
-      { input: '', expected: '' },
-    ]
+    try {
+      const judge0test = await submitTest(code)
+      console.log(judge0test)
 
-    const results = tests.map((test, index) => {
-      try {
-        const userFunction = new Function(`return ${code}`)()
-        const result = userFunction(test.input)
-        if (result === test.expected) {
-          return `Test ${index + 1}: Passed`
-        } else {
-          return `Test ${index + 1}: Failed (Expected "${
-            test.expected
-          }", got "${result}")`
-        }
-      } catch (error) {
-        return `Test ${index + 1}: Error - ${error}`
+      new Function(code)()
+
+      const context = {
+        describe,
+        test,
+        expect,
       }
-    })
 
-    setTestResults(results)
+      const results = new Function(
+        ...Object.keys(context),
+        `${code}\n return ${challenge.tests}`
+      )(...Object.values(context)) as Array<TestResult>
+
+      setTestResults(
+        results.map(
+          (result) =>
+            `${result.passed ? '✓' : '✗'} ${result.description}${
+              result.error ? `\n   ${result.error}` : ''
+            }`
+        )
+      )
+    } catch (error) {
+      console.error('Test error:', error)
+      setTestResults([`Error running tests: ${error}`])
+    }
   }
 
   return (
@@ -111,7 +116,7 @@ export default function Challenge(challenge: Challenge) {
                           <li
                             key={index}
                             className={
-                              result.includes('Passed')
+                              result.includes('✓')
                                 ? 'text-green-600'
                                 : 'text-red-600'
                             }
