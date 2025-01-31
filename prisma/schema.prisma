@@ -20,6 +20,7 @@ model User {
   challenges    Challenge[]
 
   @@map("user")
+  Submission Submission[]
 }
 
 model Session {
@@ -79,4 +80,21 @@ model Challenge {
   User        User?    @relation(fields: [userId], references: [id])
   tips        String?
   tests       String
+
+  Submission Submission[]
+}
+
+model Submission {
+  id          String   @id @default(uuid())
+  userId      String
+  challengeId Int
+  code        String
+  passed      Boolean
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, challengeId], name: "userId_challengeId")
+  @@map("submission")
 }
