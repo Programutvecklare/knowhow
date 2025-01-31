@@ -25,11 +25,23 @@ export default function CreateChallenge() {
   const [title, setTitle] = useState('')
   const [instructions, setInstructions] = useState('')
   const [difficulty, setDifficulty] = useState('')
-  const [tests, setTests] = useState('')
-  const [boilerplate, setBoilerplate] = useState('')
   const [tips, setTips] = useState('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
+  const [tests, setTests] = useState(`describe('reverse', [
+  test('Reverse a simple string', () => {
+    expect(reverse('hello')).toBe('olleh')
+  }),
+  test('Handle empty string', () => {
+    expect(reverse('')).toBe('')
+  }),
+  test('Handle single character', () => {
+    expect(reverse('a')).toBe('a')
+  })
+])`)
+  const [boilerplate, setBoilerplate] = useState(`function reverse(str) {
+  return str.split('').reverse().join('')
+}`)
 
   const handleSubmit = async () => {
     if (isLoading) return
@@ -112,8 +124,9 @@ export default function CreateChallenge() {
                 value={tips}
                 onChange={setTips}
                 extensions={[javascript()]}
-                placeholder="Enter your tips or code"
+                placeholder="Enter tips for the challenge"
                 className="border rounded-lg w-full"
+                theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
 
