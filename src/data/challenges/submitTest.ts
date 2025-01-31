@@ -38,22 +38,22 @@ export default async function submitTest(code: string, challengeId: string) {
       console.log('Created new submission:', newSubmission)
     }
 
-    // const submission = await prisma.submission.upsert({
-    //   where: {
-    //     userId_challengeId: { userId, challengeId }, // This must match the constraint name
-    //   },
-    //   update: {
-    //     code,
-    //     passed: false, // Reset passed status when updating
-    //     createdAt: new Date(), // Update timestamp
-    //   },
-    //   create: {
-    //     userId,
-    //     challengeId,
-    //     code,
-    //     passed: false,
-    //   },
-    // })
+    const submission = await prisma.submission.upsert({
+      where: {
+        userId_challengeId: { userId, challengeId }, // This must match the constraint name
+      },
+      update: {
+        code,
+        passed: false, // Reset passed status when updating
+        createdAt: new Date(), // Update timestamp
+      },
+      create: {
+        userId,
+        challengeId,
+        code,
+        passed: false,
+      },
+    })
 
     return submission
   } catch (error) {
