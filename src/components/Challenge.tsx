@@ -24,7 +24,10 @@ export default function Challenge(challenge: Challenge) {
   const [testResults, setTestResults] = useState<string[]>([])
 
   const runTests = async () => {
-    const judge0test = await submitTest(code)
+    // const challengeID = challenge.id + ' '
+    const challengeID = '1'
+
+    const judge0test = await submitTest(code, challengeID)
     console.log(judge0test)
     const tests = [
       { input: 'hello', expected: 'olleh' },
