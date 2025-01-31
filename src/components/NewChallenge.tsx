@@ -14,6 +14,14 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { newChallenge } from '@/data/challenges/new-challenge'
 import { useRouter } from 'next/navigation'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
@@ -131,8 +139,43 @@ export default function CreateChallenge() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="tests">Tests</Label>
-
+              <div className="flex gap-1 items-center">
+                <Label htmlFor="tests">Tests</Label>
+                <Dialog>
+                  <DialogTrigger className="hover:text-gray-300 hover:border-gray-300 bg-transparent text-gray-400 border-gray-400 border-2 text-sm font-bold rounded-full w-5 h-5 flex justify-center items-center">
+                    ?
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>
+                        Instructions on how to write tests
+                      </DialogTitle>
+                      <DialogDescription
+                        className="flex flex-col gap-3"
+                        asChild
+                      >
+                        <div>
+                          Example: test that verifies the output of a function
+                          that adds two numbers.
+                          <ReactCodeMirror
+                            value={`test('adds 1 + 2 to equal 3', () => {
+  expect(sum(1, 2)).toBe(3)
+})`}
+                            extensions={[javascript()]}
+                            className="border border-gray-400 rounded-lg shadow-inner p-2"
+                            theme={
+                              resolvedTheme === 'dark'
+                                ? vscodeDark
+                                : githubLight
+                            }
+                            readOnly
+                          />
+                        </div>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <ReactCodeMirror
                 value={tests}
                 onChange={setTests}
