@@ -21,7 +21,7 @@ model User {
   challenges    Challenge[]
   experience    Experience[]
   submission    Submission[]
-  
+
   @@unique([email])
   @@map("user")
 }
@@ -85,7 +85,7 @@ model Challenge {
   tests       String
   submission  Submission[]
   experience  Experience[]
-  
+
   @@map("challenge")
 }
 
