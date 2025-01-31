@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -16,7 +15,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { newChallenge } from '@/data/challenges/new-challenge'
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { githubLight } from '@uiw/codemirror-theme-github'
 import { useTheme } from 'next-themes'
@@ -29,13 +28,13 @@ export default function CreateChallenge() {
   const [tests, setTests] = useState('')
   const [boilerplate, setBoilerplate] = useState('')
   const [tips, setTips] = useState('')
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const router = useRouter()
 
   const handleSubmit = async () => {
-    if (isLoading) return 
+    if (isLoading) return
     setIsLoading(true)
-    
+
     try {
       const createdChallengeId = await newChallenge({
         title,
@@ -44,23 +43,25 @@ export default function CreateChallenge() {
         tests,
         boilerplate,
         tips,
-      });
+      })
 
-      router.push(`/challenges/${createdChallengeId}`);
-      router.refresh();
+      router.push(`/challenges/${createdChallengeId}`)
+      router.refresh()
     } catch (error) {
-      console.error('Error creating challenge:', error);
+      console.error('Error creating challenge:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="container mx-auto p-4">
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit()
+        }}
+      >
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>New Challenge</CardTitle>
@@ -141,11 +142,8 @@ export default function CreateChallenge() {
                 theme={resolvedTheme === 'dark' ? vscodeDark : githubLight}
               />
             </div>
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}>
-                 {isLoading ? 'Creating...' : 'Create Challenge'}
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Creating...' : 'Create Challenge'}
             </Button>
           </CardContent>
         </Card>

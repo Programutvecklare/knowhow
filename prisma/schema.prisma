@@ -69,7 +69,7 @@ model Verification {
 }
 
 model Challenge {
-  id          String      @id @default(uuid())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   level       Int
@@ -87,7 +87,7 @@ model Challenge {
 model Submission {
   id          String   @id @default(uuid())
   userId      String
-  challengeId String
+  challengeId Int
   code        String
   passed      Boolean
   createdAt   DateTime @default(now())
