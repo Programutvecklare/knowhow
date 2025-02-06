@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
 import getLevelDescription from '@/lib/level'
 import { Button } from '@/components/ui/button'
+import clsx from 'clsx'
 
 export default function Challenges({
   challenges,
@@ -36,6 +37,7 @@ export default function Challenges({
                   <TableHead className="w-[25%]">Description</TableHead>
                   <TableHead className="w-[25%]">Level</TableHead>
                   <TableHead className="w-[25%]">Created</TableHead>
+                  <TableHead className="w-[10%] text-center">Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -50,13 +52,21 @@ export default function Challenges({
                   const levelDescription = getLevelDescription(challenge.level)
                   const challengeId = Number(challenge.id)
 
+                  const isCompleted =
+                  challenge.submission?.[0]?.completed ?? false
+
                   return (
                     <Link
                       href={`/challenges/${challengeId}`}
                       key={challengeId}
                       legacyBehavior
                     >
-                      <TableRow className="cursor-pointer">
+                      <TableRow
+                        className={clsx(
+                          'cursor-pointer transition-opacity',
+                          isCompleted && 'opacity-50' 
+                        )}
+                      >
                         <TableCell className="w-[25%]">
                           {challenge.title}
                         </TableCell>
@@ -68,6 +78,9 @@ export default function Challenges({
                         </TableCell>
                         <TableCell className="w-[25%]">
                           {createdAtResult}
+                        </TableCell>
+                        <TableCell className="w-[20%] text-center">
+                          {isCompleted ? '✓' : '✗'}
                         </TableCell>
                       </TableRow>
                     </Link>

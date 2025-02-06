@@ -36,12 +36,15 @@ export default async function submitTest(code: string, challengeId: number) {
   const judge =  await judge0(combinedCode)
 
   let resultArray = [];
+  let completed = false;
+
   try {
     const cleanedResult = judge.stdout.trim()
       .replace(/([,{])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') 
       .replace(/'/g, '"');
 
     resultArray = JSON.parse(cleanedResult);
+    completed = resultArray.every((result: TestResult) => result.passed === true);
   } catch (error) {
     console.error('Failed to parse judge0 result:', error);
   }
@@ -53,13 +56,15 @@ export default async function submitTest(code: string, challengeId: number) {
     update: {
       code,
       passed: false,
+      completed: completed,
       createdAt: new Date(),
     },
     create: {
       userId,
       challengeId,
       code,
-      passed: false
+      passed: false,
+      completed: completed,
     },
   })
 
