@@ -1,16 +1,4 @@
-import { Challenge } from '@prisma/client'
-
-interface ChallengeWithSubmission extends Challenge {
-  submission?: {
-    passed: boolean
-  }[]
-}
-
-export default function Profile({
-  challenges,
-}: {
-  challenges: ChallengeWithSubmission[]
-}) {
+export default function Profile({ challenges }: { challenges: Challenge[] }) {
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold mt-12">Profile</h1>
