@@ -57,15 +57,10 @@ export default function Challenge(challenge: Challenge) {
       )
 
       if (results.every((result) => result.passed)) {
-        console.log('yay user passed!')
         setPassed(true)
       } else {
-        console.log('user didnt pass')
         setPassed(false)
       }
-
-      console.log('test results: ', testResults)
-      console.log('passed status: ', passed)
     } catch (error) {
       console.error('Test error:', error)
       setTestResults([`Error running tests: ${error}`])
