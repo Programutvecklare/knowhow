@@ -9,15 +9,28 @@ export const getChallenges = async () => {
       headers: await headers(),
     });
 
-
     if (!session || !session.user || !session.user.id) {
       throw new Error("User not authorized");
     }
 
     return await prisma.challenge.findMany({
+      where: {
+        submission: {
+          some: {
+            userId: session.user.id
+          }
+        }
+      },
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        submission: {
+          where: {
+            userId: session.user.id
+          },
+        }
+      }
     });
 
   } catch (error) {
