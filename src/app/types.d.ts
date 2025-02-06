@@ -32,7 +32,6 @@ type Submission = {
     challengeId: number;
     code: string;
     passed: boolean;
-    completed: boolean;
     createdAt: Date;
     updatedAt: Date;
 }

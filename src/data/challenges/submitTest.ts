@@ -36,7 +36,7 @@ export default async function submitTest(code: string, challengeId: number) {
   const judge =  await judge0(combinedCode)
 
   let resultArray = [];
-  let completed = false;
+  let passed = false;
 
   try {
     const cleanedResult = judge.stdout.trim()
@@ -44,7 +44,7 @@ export default async function submitTest(code: string, challengeId: number) {
       .replace(/'/g, '"');
 
     resultArray = JSON.parse(cleanedResult);
-    completed = resultArray.every((result: TestResult) => result.passed === true);
+    passed = resultArray.every((result: TestResult) => result.passed === true);
   } catch (error) {
     console.error('Failed to parse judge0 result:', error);
   }
@@ -55,16 +55,14 @@ export default async function submitTest(code: string, challengeId: number) {
     },
     update: {
       code,
-      passed: false,
-      completed: completed,
+      passed,
       createdAt: new Date(),
     },
     create: {
       userId,
       challengeId,
       code,
-      passed: false,
-      completed: completed,
+      passed,
     },
   })
 

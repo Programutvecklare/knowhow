@@ -30,7 +30,7 @@ export const getChallenges = async () => {
             userId: session.user.id
           },
           select: {
-            completed: true,
+            passed: true,
           }
         }
       }

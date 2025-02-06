@@ -53,7 +53,7 @@ export default function Challenges({
                   const challengeId = Number(challenge.id)
 
                   const isCompleted =
-                  challenge.submission?.[0]?.completed ?? false
+                  challenge.submission?.[0]?.passed ?? false
 
                   return (
                     <Link
