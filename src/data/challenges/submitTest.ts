@@ -41,11 +41,12 @@ export default async function submitTest(code: string, challengeId: number) {
       .replace(/([,{])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') 
       .replace(/'/g, '"');
 
-    resultArray = JSON.parse(cleanedResult);
+      resultArray = JSON.parse(cleanedResult);
   } catch (error) {
     console.error('Failed to parse judge0 result:', error);
   }
 
+  console.log(resultArray)
   await prisma.submission.upsert({
     where: {
       userId_challengeId: { userId, challengeId },
@@ -62,6 +63,6 @@ export default async function submitTest(code: string, challengeId: number) {
       passed: false
     },
   })
-
+  console.log(judge)
   return resultArray
 }
