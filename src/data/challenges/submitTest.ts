@@ -34,7 +34,6 @@ export default async function submitTest(code: string, challengeId: number) {
   ${code}
   `
   const judge =  await judge0(combinedCode)
-
   let resultArray = [];
   let passed = false;
 
@@ -48,7 +47,7 @@ export default async function submitTest(code: string, challengeId: number) {
   } catch (error) {
     console.error('Failed to parse judge0 result:', error);
   }
-
+  
   await prisma.submission.upsert({
     where: {
       userId_challengeId: { userId, challengeId },
