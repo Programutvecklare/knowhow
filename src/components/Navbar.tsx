@@ -24,7 +24,7 @@ import {
 import { Skeleton } from './ui/skeleton'
 import { Progress } from './ui/progress'
 
-export default function Navbar() {
+export default function Navbar({ xp }: { xp: number }) {
   const { data: session, isPending } = authClient.useSession()
 
   const router = useRouter()
@@ -37,6 +37,23 @@ export default function Navbar() {
       },
     })
   }
+
+  const XP_PER_LEVEL = 50
+
+  function calculateLevel(xp: number): number {
+    return Math.floor(xp / XP_PER_LEVEL) + 1
+  }
+
+  function getXPForNextLevel(currentXP: number): number {
+    const currentLevel = calculateLevel(currentXP)
+    return currentLevel * XP_PER_LEVEL
+  }
+
+  const currentLevel = calculateLevel(xp)
+  const nextLevelXP = getXPForNextLevel(xp)
+  const currentLevelXP = (currentLevel - 1) * XP_PER_LEVEL
+  const progressToNextLevel =
+    ((xp - currentLevelXP) / (nextLevelXP - currentLevelXP)) * 100
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-white dark:bg-black h-16">
@@ -74,15 +91,18 @@ export default function Navbar() {
                   <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col gap-1">
-                        <p>1 XP</p>
-                        <Progress value={1} max={5} className="w-full" />
+                        <p>{xp} XP</p>
+                        <Progress
+                          value={progressToNextLevel}
+                          className="w-full"
+                        />
                         <div className="flex items-center justify-between text-sm">
-                          <p>Level 0</p>
+                          <p>Level {currentLevel}</p>
                           <div>
                             <span className="text-muted-foreground">
-                              4 XP to
+                              {nextLevelXP - xp} XP to
                             </span>{' '}
-                            Level 1
+                            Level {currentLevel + 1}
                           </div>
                         </div>
                       </div>
