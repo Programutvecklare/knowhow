@@ -10,7 +10,7 @@ export function expect<T extends Comparable>(received: T) {
 }
 
 export function describe(description: string, testCases: TestCase[]): TestResult[] {
-    return testCases.map((testCase) => {
+    const result = testCases.map((testCase) => {
         try {
             testCase.fn();
             return {
@@ -25,6 +25,8 @@ export function describe(description: string, testCases: TestCase[]): TestResult
             };
         }
     });
+    console.log(result)
+    return result;
 }
 
 export function test(description: string, fn: () => void): TestCase {
