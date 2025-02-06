@@ -19,12 +19,15 @@ import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
 import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useRouter } from 'next/navigation'
 
 export default function Challenge(challenge: Challenge) {
   const { resolvedTheme } = useTheme()
   const [code, setCode] = useState(`${challenge.boilerplate}`)
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
+  const [passed, setPassed] = useState(false)
+  const router = useRouter()
 
   const runTests = async () => {
     try {
@@ -52,6 +55,17 @@ export default function Challenge(challenge: Challenge) {
             }`
         )
       )
+
+      if (results.every((result) => result.passed)) {
+        console.log('yay user passed!')
+        setPassed(true)
+      } else {
+        console.log('user didnt pass')
+        setPassed(false)
+      }
+
+      console.log('test results: ', testResults)
+      console.log('passed status: ', passed)
     } catch (error) {
       console.error('Test error:', error)
       setTestResults([`Error running tests: ${error}`])
@@ -186,8 +200,11 @@ export default function Challenge(challenge: Challenge) {
                     )}
                   </div>
                 </ScrollArea>
-                <Button className="rounded-none" onClick={runTests}>
-                  Run
+                <Button
+                  className="rounded-none"
+                  onClick={passed ? () => router.push('/success') : runTests}
+                >
+                  {passed ? 'Continue' : 'Run'}
                 </Button>
               </div>
             </ResizablePanel>
