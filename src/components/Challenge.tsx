@@ -44,6 +44,8 @@ export default function Challenge(challenge: Challenge) {
         `${code}\n return ${challenge.tests}`
       )(...Object.values(context)) as Array<TestResult>
 
+      console.log('results', results)
+
       setTestResults(
         results.map(
           (result) =>
