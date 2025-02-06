@@ -21,7 +21,7 @@ import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useRouter } from 'next/navigation'
 
-export default function Challenge(challenge: Challenge) {
+export default function Challenge({ challenge }: { challenge: Challenge }) {
   const { resolvedTheme } = useTheme()
   const [code, setCode] = useState(`${challenge.boilerplate}`)
   const [showTips, setShowTips] = useState(false)

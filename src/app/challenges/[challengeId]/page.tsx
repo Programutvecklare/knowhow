@@ -9,5 +9,5 @@ export default async function ChallengePage({
   const id = (await params).challengeId
   const challenge = await getChallengeById(id)
 
-  return <Challenge {...challenge} />
+  return <Challenge challenge={{ ...challenge, submission: [] }} />
 }
