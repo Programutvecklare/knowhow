@@ -1,16 +1,13 @@
 import Challenge from '@/components/Challenge'
-import React from 'react'
 import { getChallengeById } from '@/data/challenges/challenge'
 
-type Props = {
-  params: {
-    challengeId: string
-  }
-}
+export default async function ChallengePage({
+  params,
+}: {
+  params: Promise<{ challengeId: string }>
+}) {
+  const id = (await params).challengeId
+  const challenge = await getChallengeById(id)
 
-export default async function ChallengePage({ params }: Props) {
-  const { challengeId } = await params
-  const challenge = await getChallengeById(challengeId)
-
-  return <Challenge {...challenge} />
+  return <Challenge challenge={{ ...challenge, submission: [] }} />
 }

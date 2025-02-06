@@ -1,3 +1,5 @@
+'use client'
+
 export default function Profile({ challenges }: { challenges: Challenge[] }) {
   return (
     <div className="flex flex-col items-center justify-center">
