@@ -45,7 +45,7 @@ export default function Challenge(challenge: Challenge) {
       const results = new Function(
         ...Object.keys(context),
         `${code}\n return ${challenge.tests}`
-      )(...Object.values(context))
+      )(...Object.values(context)) as Array<TestResult>
 
       setTestResults(
         results.map(
