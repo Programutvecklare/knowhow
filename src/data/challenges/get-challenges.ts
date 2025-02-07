@@ -3,7 +3,29 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 
-export const getChallenges = async () => {
+export const getAllChallenges = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  return await prisma.challenge.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      submission: session?.user?.id ? {
+        where: {
+          userId: session.user.id
+        },
+        select: {
+          passed: true,
+        }
+      } : undefined
+    }
+  });
+};
+
+export const getUserChallenges = async () => {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),

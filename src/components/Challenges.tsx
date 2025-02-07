@@ -18,6 +18,7 @@ export default function Challenges({
 }: {
   challenges: Challenge[]
 }) {
+  console.log(challenges)
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between">
@@ -52,8 +53,7 @@ export default function Challenges({
                   const levelDescription = getLevelDescription(challenge.level)
                   const challengeId = Number(challenge.id)
 
-                  const isCompleted =
-                  challenge.submission?.[0]?.passed ?? false
+                  const isCompleted = challenge.submission?.[0]?.passed ?? false
 
                   return (
                     <Link
@@ -64,7 +64,7 @@ export default function Challenges({
                       <TableRow
                         className={clsx(
                           'cursor-pointer transition-opacity',
-                          isCompleted && 'opacity-50' 
+                          isCompleted && 'opacity-50'
                         )}
                       >
                         <TableCell className="w-[25%]">
