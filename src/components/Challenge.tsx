@@ -19,6 +19,7 @@ import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
 import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useRouter } from 'next/navigation'
 
 interface ChallengeProps {
   challenge: {
@@ -45,6 +46,7 @@ export default function Challenge({
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
   const [passed, setPassed] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     if (previousSubmission && previousSubmission.code) {
@@ -224,7 +226,15 @@ export default function Challenge({
                     )}
                   </div>
                 </ScrollArea>
-                <Button className="rounded-none" onClick={runTests}>
+                <Button
+                  className="rounded-none"
+                  onClick={
+                    passed
+                      ? () =>
+                          router.push(`/challenges/completed/${challenge.id}`)
+                      : runTests
+                  }
+                >
                   {passed ? 'Continue' : 'Run'}
                 </Button>
               </div>
