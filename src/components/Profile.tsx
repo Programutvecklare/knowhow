@@ -21,8 +21,20 @@ import {
 import { Label } from './ui/label'
 import Link from 'next/link'
 import { User } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
-export default function Profile({ challenges }: { challenges: Challenge[] }) {
+export default function Profile({
+  challenges,
+  userChallenges,
+}: {
+  challenges: Challenge[]
+  userChallenges: Challenge[]
+}) {
   const { data: session, isPending: sessionPending } = authClient.useSession()
   const [name, setName] = useState('')
   const [image, setImage] = useState('')
@@ -66,6 +78,7 @@ export default function Profile({ challenges }: { challenges: Challenge[] }) {
   }
 
   const isLoading = sessionPending || isPending
+  const hasCreatedChallenges = userChallenges.length > 0
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -132,31 +145,49 @@ export default function Profile({ challenges }: { challenges: Challenge[] }) {
                 >
                   Update Profile
                 </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button disabled={isLoading} variant="destructive">
-                      Delete Account
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your account and remove your data from our
-                        servers.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDeleteUser}>
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <TooltipProvider>
+                  <Tooltip delayDuration={200}>
+                    <TooltipTrigger asChild>
+                      <div>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button
+                              disabled={isLoading || hasCreatedChallenges}
+                              variant="destructive"
+                            >
+                              Delete Account
+                            </Button>
+                          </AlertDialogTrigger>
+                          {!hasCreatedChallenges && (
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete your account and remove
+                                  your data from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleDeleteUser}>
+                                  Continue
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          )}
+                        </AlertDialog>
+                      </div>
+                    </TooltipTrigger>
+                    {hasCreatedChallenges && (
+                      <TooltipContent>
+                        <p>You currently have created challenges.</p>
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
               </div>
             </div>
           </div>
