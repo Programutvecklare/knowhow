@@ -29,6 +29,9 @@ export const getChallenges = async () => {
           where: {
             userId: session.user.id
           },
+          select: {
+            passed: true,
+          }
         }
       }
     });
