@@ -16,6 +16,7 @@ export const getSubmissions = async (challengeId: number) => {
     return await prisma.submission.findMany({
       where: {
         challengeId,
+        passed: true,
       },
       include: {
         user: true,
