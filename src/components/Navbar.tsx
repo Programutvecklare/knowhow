@@ -117,11 +117,11 @@ export default function Navbar({ xp }: { xp: number }) {
                     >
                       <Avatar className="size-10">
                         <AvatarImage
-                          src={session.user?.image || ''}
-                          alt={session.user?.name || ''}
+                          src={session?.user?.image || undefined}
+                          alt={session?.user?.name || undefined}
                         />
                         <AvatarFallback>
-                          {session.user?.name?.[0] || <User />}
+                          {session?.user?.name?.[0] || <User />}
                         </AvatarFallback>
                       </Avatar>
                     </Button>
@@ -130,10 +130,10 @@ export default function Navbar({ xp }: { xp: number }) {
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {session.user?.name}
+                          {session?.user?.name}
                         </p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          {session.user?.email}
+                          {session?.user?.email}
                         </p>
                       </div>
                     </DropdownMenuLabel>

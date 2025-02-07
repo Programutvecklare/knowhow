@@ -11,7 +11,7 @@ export const getUserExperience = async () => {
         });
 
         if (!session || !session.user || !session.user.id) {
-            throw new Error("User not authorized");
+            return 0;
         }
 
         const userExperience = await prisma.user.findUnique({
