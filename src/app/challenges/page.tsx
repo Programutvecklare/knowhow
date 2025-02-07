@@ -1,8 +1,8 @@
 import Challenges from '@/components/Challenges'
-import { getChallenges } from '@/data/challenges/get-challenges'
+import { getAllChallenges } from '@/data/challenges/get-challenges'
 
 export default async function ChallengesPage() {
-  const challenges = await getChallenges()
+  const challenges = await getAllChallenges()
 
   return <Challenges challenges={challenges} />
 }
