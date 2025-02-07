@@ -34,35 +34,36 @@ export default async function submitTest(code: string, challengeId: number) {
   ${code}
   `
   const judge =  await judge0(combinedCode)
-
   let resultArray = [];
+  let passed = false;
+
   try {
     const cleanedResult = judge.stdout.trim()
       .replace(/([,{])\s*([a-zA-Z0-9_]+)\s*:/g, '$1"$2":') 
       .replace(/'/g, '"');
 
-      resultArray = JSON.parse(cleanedResult);
+    resultArray = JSON.parse(cleanedResult);
+    passed = resultArray.every((result: TestResult) => result.passed === true);
   } catch (error) {
     console.error('Failed to parse judge0 result:', error);
   }
-
-  console.log(resultArray)
+  
   await prisma.submission.upsert({
     where: {
       userId_challengeId: { userId, challengeId },
     },
     update: {
       code,
-      passed: false,
+      passed,
       createdAt: new Date(),
     },
     create: {
       userId,
       challengeId,
       code,
-      passed: false
+      passed,
     },
   })
-  console.log(judge)
+
   return resultArray
 }
