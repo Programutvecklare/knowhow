@@ -18,7 +18,6 @@ export default function Challenges({
 }: {
   challenges: Challenge[]
 }) {
-  console.log(challenges)
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between">
