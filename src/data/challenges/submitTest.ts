@@ -32,9 +32,10 @@ export default async function submitTest(code: string, challengeId: number) {
   ${challenge.tests}
   ${code}
   `
-  const judge = await judge0(combinedCode)
 
+  const judge = await judge0(combinedCode)
   let resultArray = []
+  let userPassed = true
 
   const cleanedResult = judge.stdout
     .trim()
@@ -43,10 +44,6 @@ export default async function submitTest(code: string, challengeId: number) {
 
   resultArray = JSON.parse(cleanedResult)
   console.log('cleaned result: ', cleanedResult)
-
-  let userPassed = true
-  const judge =  await judge0(combinedCode)
-  let resultArray = [];
 
   try {
     for (let i = 0; i < resultArray.length; i++) {
@@ -61,7 +58,7 @@ export default async function submitTest(code: string, challengeId: number) {
         },
         update: {
           code,
-          passed: false,
+          passed: userPassed,
           createdAt: new Date(),
         },
         create: {
