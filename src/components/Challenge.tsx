@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/resizable'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Badge } from '@/components/ui/badge'
 import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
@@ -19,15 +19,42 @@ import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
 import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useRouter } from 'next/navigation'
 
-export default function Challenge({ challenge }: { challenge: Challenge }) {
+interface ChallengeProps {
+  challenge: {
+    id: number
+    createdAt: Date
+    updatedAt: Date
+    userId: string | null
+    title: string
+    description: string
+    level: number
+    boilerplate: string | null
+    tips: string | null
+    tests: string
+  }
+  previousSubmission: { code: string } | null
+}
+
+export default function Challenge({
+  challenge,
+  previousSubmission,
+}: ChallengeProps) {
   const { resolvedTheme } = useTheme()
-  const [code, setCode] = useState(`${challenge.boilerplate}`)
+  const [code, setCode] = useState('')
   const [showTips, setShowTips] = useState(false)
   const [testResults, setTestResults] = useState<string[]>([])
   const [passed, setPassed] = useState(false)
-  const router = useRouter()
+
+  useEffect(() => {
+    if (previousSubmission && previousSubmission.code) {
+      setCode(previousSubmission.code)
+      console.log('set code to previous submission: ', previousSubmission.code)
+    } else {
+      setCode(`${challenge.boilerplate}`)
+      console.log('set code to boilerplate: ', challenge.boilerplate)
+    }
+  }, [previousSubmission, challenge.boilerplate])
 
   const runTests = async () => {
     try {
@@ -197,15 +224,7 @@ export default function Challenge({ challenge }: { challenge: Challenge }) {
                     )}
                   </div>
                 </ScrollArea>
-                <Button
-                  className="rounded-none"
-                  onClick={
-                    passed
-                      ? () =>
-                          router.push(`/challenges/completed/${challenge.id}`)
-                      : runTests
-                  }
-                >
+                <Button className="rounded-none" onClick={runTests}>
                   {passed ? 'Continue' : 'Run'}
                 </Button>
               </div>
