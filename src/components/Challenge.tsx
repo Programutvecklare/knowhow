@@ -31,11 +31,6 @@ export default function Challenge({ challenge }: { challenge: Challenge }) {
 
   const runTests = async () => {
     try {
-      const judge0test = await submitTest(code, challenge.id)
-      console.log(judge0test)
-
-      new Function(code)()
-
       const context = {
         describe,
         test,
@@ -47,6 +42,9 @@ export default function Challenge({ challenge }: { challenge: Challenge }) {
         `${code}\n return ${challenge.tests}`
       )(...Object.values(context)) as Array<TestResult>
 
+      const userPassed = results.every((result) => result.passed === true)
+      setPassed(userPassed)
+
       setTestResults(
         results.map(
           (result) =>
@@ -56,11 +54,15 @@ export default function Challenge({ challenge }: { challenge: Challenge }) {
         )
       )
 
-      if (results.every((result) => result.passed)) {
-        setPassed(true)
-      } else {
-        setPassed(false)
+      if (!userPassed) {
+        console.log('Test did not pass. Not sending submission to Judge0.')
+        return
       }
+
+      const judge0test = await submitTest(code, challenge.id)
+      console.log('Judge0 response: ', judge0test)
+
+      new Function(code)()
     } catch (error) {
       console.error('Test error:', error)
       setTestResults([`Error running tests: ${error}`])

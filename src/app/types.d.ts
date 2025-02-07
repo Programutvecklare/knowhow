@@ -9,7 +9,7 @@ type Challenge = {
     boilerplate: string | null;
     tips: string | null;
     tests: string;
-    submission: Submission[];
+    submission: { passed: boolean }[];
 }
 
 type TestCase = {

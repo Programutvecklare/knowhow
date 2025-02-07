@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { headers } from 'next/headers';
 import type { Challenge } from '@prisma/client';
 
-export const newChallenge = async (data: Omit<Challenge, 'id' | 'createdAt' | 'updatedAt' | 'userId' >) => {
+export const newChallenge = async (data: Omit<Challenge, 'id' | 'createdAt' | 'updatedAt' | 'userId'>) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });

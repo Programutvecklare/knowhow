@@ -95,7 +95,7 @@ model Experience {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt
   userId      String
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   challengeId Int
   challenge   Challenge @relation(fields: [challengeId], references: [id])
 
@@ -111,7 +111,7 @@ model Submission {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
 
   @@unique([userId, challengeId], name: "userId_challengeId")
   @@map("submission")
