@@ -70,8 +70,70 @@ export default async function submitTest(code: string, challengeId: number) {
       })
     }
   } catch (error) {
-    console.error('Failed to parse judge0 result:', error);
+    console.error('Failed to parse judge0 result:', error)
   }
 
   return resultArray
+}
+
+export async function giveUserXP(challenge: {
+  id: number
+  createdAt: Date
+  updatedAt: Date
+  userId: string | null
+  title: string
+  description: string
+  level: number
+  boilerplate: string | null
+  tips: string | null
+  tests: string
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session || !session.user || !session.user.id) {
+    throw new Error('User not authorized')
+  }
+
+  const difficulty = challenge.level
+  console.log('challenge difficulty: ', difficulty)
+
+  const existingXP = await prisma.experience.findUnique({
+    where: {
+      userId_challengeId: {
+        userId: challenge.userId!,
+        challengeId: challenge.id,
+      },
+    },
+  })
+
+  if (existingXP) {
+    console.log('User has already cleared this challenge and been awarded XP.')
+    return
+  }
+
+  let xpValue = 0
+  switch (challenge.level) {
+    case 0:
+      xpValue = 100
+      break
+    case 1:
+      xpValue = 200
+      break
+    case 2:
+      xpValue = 300
+      break
+  }
+
+  const xpRecord = await prisma.experience.create({
+    data: {
+      userId: challenge.userId!,
+      challengeId: challenge.id,
+      value: xpValue,
+    },
+  })
+
+  console.log('Awarded XP record:', xpRecord)
+  return xpRecord
 }

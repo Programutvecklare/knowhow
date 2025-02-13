@@ -13,7 +13,7 @@ import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { githubLight } from '@uiw/codemirror-theme-github'
-import submitTest from '@/data/challenges/submitTest'
+import submitTest, { giveUserXP } from '@/data/challenges/submitTest'
 import getLevelDescription from '@/lib/level'
 import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
@@ -90,6 +90,8 @@ export default function Challenge({
 
       const judge0test = await submitTest(code, challenge.id)
       console.log('Judge0 response: ', judge0test)
+
+      await giveUserXP(challenge)
 
       new Function(code)()
     } catch (error) {
