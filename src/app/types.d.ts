@@ -26,6 +26,17 @@ type TestResult = {
 type Primitive = string | number | boolean | null | undefined;
 type Comparable = Primitive | { [key: string]: Comparable } | Array<Comparable>;
 
+type User = {
+    id: string;
+    name: string;
+    email: string;
+    emailVerified: boolean;
+    image: string | null;
+    role: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
 type Submission = {
     id: string;
     userId: string;
@@ -34,4 +45,5 @@ type Submission = {
     passed: boolean;
     createdAt: Date;
     updatedAt: Date;
+    user?: User;
 }
