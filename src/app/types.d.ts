@@ -12,6 +12,22 @@ type Challenge = {
     submission: { passed: boolean }[];
 }
 
+interface ChallengeProps {
+    challenge: {
+        id: number
+        createdAt: Date
+        updatedAt: Date
+        userId: string | null
+        title: string
+        description: string
+        level: number
+        boilerplate: string | null
+        tips: string | null
+        tests: string
+    }
+    previousSubmission: { code: string; passed: boolean } | null
+}
+
 type TestCase = {
     description: string;
     fn: () => void;
