@@ -40,13 +40,13 @@ async function main() {
 3. Remember to join the characters back into a string`,
                 tests: `describe('reverse', [
   test('Reverse a simple string', () => {
-    expect(reverse('hello')).toBe('olleh')
+    expect(reverseString('hello')).toBe('olleh')
   }),
   test('Handle empty string', () => {
-    expect(reverse('')).toBe('')
+    expect(reverseString('')).toBe('')
   }),
   test('Handle single character', () => {
-    expect(reverse('a')).toBe('a')
+    expect(reverseString('a')).toBe('a')
   })
 ])`,
                 userId: admin.id
