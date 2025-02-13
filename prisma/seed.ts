@@ -34,7 +34,7 @@ async function main() {
                 title: 'Reverse String',
                 description: 'Write a function that reverses a string.',
                 level: 0,
-                boilerplate: `function reverse(str) {\n  // Your code here\n}`,
+                boilerplate: `function reverseString(str) {\n  // Your code here\n}`,
                 tips: `1. You can convert a string to an array of characters using split('')
 2. Arrays have methods that can help reverse elements
 3. Remember to join the characters back into a string`,
