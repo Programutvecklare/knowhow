@@ -137,3 +137,49 @@ export async function giveUserXP(challenge: {
   console.log('Awarded XP record:', xpRecord)
   return xpRecord
 }
+
+export async function depleteUserXP(challenge: {
+  id: number
+  createdAt: Date
+  updatedAt: Date
+  userId: string | null
+  title: string
+  description: string
+  level: number
+  boilerplate: string | null
+  tips: string | null
+  tests: string
+}) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session || !session.user || !session.user.id) {
+    throw new Error('User not authorized')
+  }
+
+  const userID = session.user.id
+  let totalXP = 0
+
+  const penalty = await prisma.experience.create({
+    data: {
+      userId: challenge.userId!,
+      challengeId: challenge.id,
+      value: -70,
+    },
+  })
+  console.log('new user xp: ', { penalty })
+
+  const experienceRecords = await prisma.experience.findMany({
+    where: {
+      userId: userID,
+    },
+  })
+
+  for (let i = 0; i < experienceRecords.length; i++) {
+    totalXP! += experienceRecords[i].value
+    console.log('total: ', totalXP)
+  }
+
+  return { penalty }
+}

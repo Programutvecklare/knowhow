@@ -99,7 +99,6 @@ model Experience {
   challengeId Int
   challenge   Challenge @relation(fields: [challengeId], references: [id])
 
-  @@unique([userId, challengeId], name: "userId_challengeId")
   @@map("xp")
 }
 

@@ -13,7 +13,10 @@ import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { githubLight } from '@uiw/codemirror-theme-github'
-import submitTest, { giveUserXP } from '@/data/challenges/submitTest'
+import submitTest, {
+  depleteUserXP,
+  giveUserXP,
+} from '@/data/challenges/submitTest'
 import getLevelDescription from '@/lib/level'
 import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
@@ -57,6 +60,11 @@ export default function Challenge({
       console.log('set code to boilerplate: ', challenge.boilerplate)
     }
   }, [previousSubmission, challenge.boilerplate])
+
+  const showSolution = async () => {
+    setShowTips(true)
+    await depleteUserXP(challenge)
+  }
 
   const runTests = async () => {
     try {
@@ -151,13 +159,11 @@ export default function Challenge({
                   <div>{challenge.description}</div>
                 </TabsContent>
                 <TabsContent value="solutions" className="p-4 mt-0">
-                  <Button
-                    size="sm"
-                    onClick={() => setShowTips(!showTips)}
-                    className="mb-2 "
-                  >
-                    {showTips ? 'Hide Tips' : 'Show Tips'}
-                  </Button>
+                  {!showTips && (
+                    <Button size="sm" onClick={showSolution} className="mb-2 ">
+                      Show Tips
+                    </Button>
+                  )}
                   {showTips && (
                     <ul className="list-disc pl-5">
                       <li>{challenge.tips}</li>
