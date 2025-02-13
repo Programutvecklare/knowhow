@@ -115,11 +115,11 @@ export default function Challenge({
                   Instructions
                 </TabsTrigger>
                 <TabsTrigger
-                  value="solutions"
+                  value="hints"
                   className="relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                 >
                   <Lightbulb className="-ms-0.5 me-1.5 opacity-60" size={16} />
-                  Solutions
+                  Hints
                 </TabsTrigger>
                 <TabsTrigger
                   value="tests"
@@ -133,7 +133,7 @@ export default function Challenge({
                 <TabsContent value="instructions" className="p-4 mt-0">
                   <div>{challenge.description}</div>
                 </TabsContent>
-                <TabsContent value="solutions" className="p-4 mt-0">
+                <TabsContent value="hints" className="p-4 mt-0">
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <Button
@@ -156,9 +156,16 @@ export default function Challenge({
                     {showTips && (
                       <div className="rounded-lg border bg-muted/50 p-4">
                         <h3 className="font-medium mb-2">Tips</h3>
-                        <ul className="list-disc pl-4 space-y-1 text-sm text-muted-foreground">
-                          <li>{challenge.tips}</li>
-                        </ul>
+                        <ReactCodeMirror
+                          value={challenge.tips ?? undefined}
+                          readOnly
+                          basicSetup={false}
+                          extensions={[javascript()]}
+                          className="w-full h-full"
+                          theme={
+                            resolvedTheme === 'dark' ? vscodeDark : githubLight
+                          }
+                        />
                       </div>
                     )}
                   </div>
