@@ -36,19 +36,13 @@ export default function CreateChallenge() {
   const [tips, setTips] = useState('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
-  const [tests, setTests] = useState(`describe('reverse', [
-  test('Reverse a simple string', () => {
-    expect(reverse('hello')).toBe('olleh')
+  const [tests, setTests] = useState(`describe('', [
+  test('', () => {
+    expect(hello('')).toBe('')
   }),
-  test('Handle empty string', () => {
-    expect(reverse('')).toBe('')
-  }),
-  test('Handle single character', () => {
-    expect(reverse('a')).toBe('a')
-  })
 ])`)
-  const [boilerplate, setBoilerplate] = useState(`function reverse(str) {
-  return str.split('').reverse().join('')
+  const [boilerplate, setBoilerplate] = useState(`function hello() {
+  // Your code here
 }`)
 
   const handleSubmit = async () => {
@@ -158,9 +152,11 @@ export default function CreateChallenge() {
                           Example: test that verifies the output of a function
                           that adds two numbers.
                           <ReactCodeMirror
-                            value={`test('adds 1 + 2 to equal 3', () => {
-  expect(sum(1, 2)).toBe(3)
-})`}
+                            value={`describe('sum', [
+  test('adds 1 + 2 to equal 3', () => {
+    expect(sum(1, 2)).toBe(3)
+  }),
+])`}
                             extensions={[javascript()]}
                             className="border border-gray-400 rounded-lg shadow-inner p-2"
                             theme={

@@ -23,22 +23,7 @@ import { describe, test, expect } from '@/utils/testUtils'
 import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useRouter } from 'next/navigation'
-
-interface ChallengeProps {
-  challenge: {
-    id: number
-    createdAt: Date
-    updatedAt: Date
-    userId: string | null
-    title: string
-    description: string
-    level: number
-    boilerplate: string | null
-    tips: string | null
-    tests: string
-  }
-  previousSubmission: { code: string } | null
-}
+import Link from 'next/link'
 
 export default function Challenge({
   challenge,
@@ -62,8 +47,8 @@ export default function Challenge({
   }, [previousSubmission, challenge.boilerplate])
 
   const showSolution = async () => {
-    setShowTips(true)
-    await depleteUserXP(challenge)
+    if (!showTips) await depleteUserXP(challenge)
+    setShowTips(!showTips)
   }
 
   const runTests = async () => {
@@ -140,11 +125,11 @@ export default function Challenge({
                   Instructions
                 </TabsTrigger>
                 <TabsTrigger
-                  value="solutions"
+                  value="hints"
                   className="relative w-full justify-start after:absolute after:inset-y-0 after:start-0 after:-ms-1 after:w-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                 >
                   <Lightbulb className="-ms-0.5 me-1.5 opacity-60" size={16} />
-                  Solutions
+                  Hints
                 </TabsTrigger>
                 <TabsTrigger
                   value="tests"
@@ -158,23 +143,51 @@ export default function Challenge({
                 <TabsContent value="instructions" className="p-4 mt-0">
                   <div>{challenge.description}</div>
                 </TabsContent>
-                <TabsContent value="solutions" className="p-4 mt-0">
-                  {!showTips && (
-                    <Button size="sm" onClick={showSolution} className="mb-2 ">
-                      Show Tips
-                    </Button>
-                  )}
-                  {showTips && (
-                    <ul className="list-disc pl-5">
-                      <li>{challenge.tips}</li>
-                    </ul>
-                  )}
+
+
+                <TabsContent value="hints" className="p-4 mt-0">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={showSolution}
+                      >
+                        {showTips ? 'Hide Tips' : 'Show Tips'}
+                        <Lightbulb className="ml-2 size-4" />
+                      </Button>
+                      {previousSubmission?.passed && (
+                        <Link
+                          href={`/challenges/completed/${challenge.id}`}
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          View Community Solutions →
+                        </Link>
+                      )}
+                    </div>
+                    {showTips && (
+                      <div className="rounded-lg border bg-muted/50 p-4">
+                        <h3 className="font-medium mb-2">Tips</h3>
+                        <ReactCodeMirror
+                          value={challenge.tips ?? undefined}
+                          readOnly
+                          basicSetup={false}
+                          extensions={[javascript()]}
+                          className="w-full h-full"
+                          theme={
+                            resolvedTheme === 'dark' ? vscodeDark : githubLight
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
                 </TabsContent>
                 <TabsContent value="tests" className="p-4 mt-0">
                   <div>
                     <ReactCodeMirror
                       value={challenge.tests}
                       readOnly
+                      basicSetup={false}
                       extensions={[javascript()]}
                       className="w-full h-full"
                       theme={
