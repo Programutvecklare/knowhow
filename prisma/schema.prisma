@@ -80,7 +80,7 @@ model Challenge {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @default(now()) @updatedAt
   userId      String?
-  user        User?        @relation(fields: [userId], references: [id])
+  user        User?        @relation(fields: [userId], references: [id], onDelete: Restrict)
   tips        String?
   tests       String
   submission  Submission[]

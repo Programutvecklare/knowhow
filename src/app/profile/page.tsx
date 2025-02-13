@@ -1,8 +1,12 @@
 import Profile from '@/components/Profile'
-import { getUserChallenges } from '@/data/challenges/get-challenges'
+import {
+  getAllChallenges,
+  getUserChallenges,
+} from '@/data/challenges/get-challenges'
 
 export default async function ProfilePage() {
   const challenges = await getUserChallenges()
+  const userChallenges = await getAllChallenges()
 
-  return <Profile challenges={challenges} />
+  return <Profile challenges={challenges} userChallenges={userChallenges} />
 }
