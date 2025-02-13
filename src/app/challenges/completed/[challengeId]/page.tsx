@@ -1,3 +1,4 @@
+import Completion from '@/components/Completion'
 import { getChallengeById } from '@/data/challenges/challenge'
 import {
   getSubmissions,
@@ -15,31 +16,9 @@ export default async function ChallengePage({
   const submissions = await getSubmissions(challenge.id)
   const userSubmission = await getUserSubmission(challenge.id)
 
-  if (!submissions.length) return <h1>no submissions found</h1>
+  if (!submissions.length) return <h1>No submissions found</h1>
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div>
-        <h1>
-          <b>Your solution:</b>
-        </h1>
-        <div>{userSubmission[0].code}</div>
-      </div>
-      <ul className="flex flex-col gap-4">
-        <li>
-          <b>Other users&apos; solutions:</b>
-        </li>
-        {submissions.map((submission) => {
-          const submissionUser = submission.user.name
-
-          return (
-            <li key={submission.id}>
-              <h1>{submissionUser}&apos;s code:</h1>
-              <div>{submission.code}</div>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
+    <Completion submissions={submissions} userSubmission={userSubmission} />
   )
 }

@@ -167,6 +167,7 @@ export default function Challenge({
                     <ReactCodeMirror
                       value={challenge.tests}
                       readOnly
+                      basicSetup={false}
                       extensions={[javascript()]}
                       className="w-full h-full"
                       theme={
