@@ -20,22 +20,7 @@ import { describe, test, expect } from '@/utils/testUtils'
 import { BookText, Lightbulb, Terminal } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useRouter } from 'next/navigation'
-
-interface ChallengeProps {
-  challenge: {
-    id: number
-    createdAt: Date
-    updatedAt: Date
-    userId: string | null
-    title: string
-    description: string
-    level: number
-    boilerplate: string | null
-    tips: string | null
-    tests: string
-  }
-  previousSubmission: { code: string } | null
-}
+import Link from 'next/link'
 
 export default function Challenge({
   challenge,
@@ -149,18 +134,34 @@ export default function Challenge({
                   <div>{challenge.description}</div>
                 </TabsContent>
                 <TabsContent value="solutions" className="p-4 mt-0">
-                  <Button
-                    size="sm"
-                    onClick={() => setShowTips(!showTips)}
-                    className="mb-2 "
-                  >
-                    {showTips ? 'Hide Tips' : 'Show Tips'}
-                  </Button>
-                  {showTips && (
-                    <ul className="list-disc pl-5">
-                      <li>{challenge.tips}</li>
-                    </ul>
-                  )}
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowTips(!showTips)}
+                      >
+                        {showTips ? 'Hide Tips' : 'Show Tips'}
+                        <Lightbulb className="ml-2 size-4" />
+                      </Button>
+                      {previousSubmission?.passed && (
+                        <Link
+                          href={`/challenges/completed/${challenge.id}`}
+                          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          View Community Solutions →
+                        </Link>
+                      )}
+                    </div>
+                    {showTips && (
+                      <div className="rounded-lg border bg-muted/50 p-4">
+                        <h3 className="font-medium mb-2">Tips</h3>
+                        <ul className="list-disc pl-4 space-y-1 text-sm text-muted-foreground">
+                          <li>{challenge.tips}</li>
+                        </ul>
+                      </div>
+                    )}
+                  </div>
                 </TabsContent>
                 <TabsContent value="tests" className="p-4 mt-0">
                   <div>
