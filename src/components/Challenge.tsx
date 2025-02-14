@@ -13,7 +13,10 @@ import ReactCodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode'
 import { githubLight } from '@uiw/codemirror-theme-github'
-import submitTest from '@/data/challenges/submitTest'
+import submitTest, {
+  depleteUserXP,
+  giveUserXP,
+} from '@/data/challenges/submitTest'
 import getLevelDescription from '@/lib/level'
 import { useTheme } from 'next-themes'
 import { describe, test, expect } from '@/utils/testUtils'
@@ -42,6 +45,11 @@ export default function Challenge({
       console.log('set code to boilerplate: ', challenge.boilerplate)
     }
   }, [previousSubmission, challenge.boilerplate])
+
+  const showSolution = async () => {
+    if (!showTips) await depleteUserXP({ challenge })
+    setShowTips(!showTips)
+  }
 
   const runTests = async () => {
     try {
@@ -75,6 +83,8 @@ export default function Challenge({
 
       const judge0test = await submitTest(code, challenge.id)
       console.log('Judge0 response: ', judge0test)
+
+      await giveUserXP({ challenge })
 
       new Function(code)()
     } catch (error) {
@@ -133,13 +143,14 @@ export default function Challenge({
                 <TabsContent value="instructions" className="p-4 mt-0">
                   <div>{challenge.description}</div>
                 </TabsContent>
+
                 <TabsContent value="hints" className="p-4 mt-0">
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setShowTips(!showTips)}
+                        onClick={showSolution}
                       >
                         {showTips ? 'Hide Tips' : 'Show Tips'}
                         <Lightbulb className="ml-2 size-4" />

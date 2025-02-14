@@ -9,7 +9,7 @@ type Challenge = {
     boilerplate: string | null;
     tips: string | null;
     tests: string;
-    submission: { passed: boolean }[];
+    submission?: { passed: boolean }[];
 }
 
 interface ChallengeProps {
@@ -24,6 +24,7 @@ interface ChallengeProps {
         boilerplate: string | null
         tips: string | null
         tests: string
+        submission?: Submission[]
     }
     previousSubmission: { code: string; passed: boolean } | null
 }
