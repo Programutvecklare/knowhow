@@ -38,7 +38,7 @@ export default function Navbar({ xp }: { xp: number }) {
     })
   }
 
-  const XP_PER_LEVEL = 100
+  const XP_PER_LEVEL = 150
 
   function calculateLevel(xp: number): number {
     return Math.floor(xp / XP_PER_LEVEL) + 1
