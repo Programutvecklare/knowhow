@@ -47,7 +47,7 @@ export default function Challenge({
   }, [previousSubmission, challenge.boilerplate])
 
   const showSolution = async () => {
-    if (!showTips) await depleteUserXP(challenge)
+    if (!showTips) await depleteUserXP({ challenge })
     setShowTips(!showTips)
   }
 
@@ -84,7 +84,7 @@ export default function Challenge({
       const judge0test = await submitTest(code, challenge.id)
       console.log('Judge0 response: ', judge0test)
 
-      await giveUserXP(challenge)
+      await giveUserXP({ challenge })
 
       new Function(code)()
     } catch (error) {
@@ -143,7 +143,6 @@ export default function Challenge({
                 <TabsContent value="instructions" className="p-4 mt-0">
                   <div>{challenge.description}</div>
                 </TabsContent>
-
 
                 <TabsContent value="hints" className="p-4 mt-0">
                   <div className="flex flex-col gap-4">

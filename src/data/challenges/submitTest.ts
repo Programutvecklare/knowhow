@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import { describe, test, expect } from '@/utils/testUtils'
+import { revalidatePath } from 'next/cache'
 
 export default async function submitTest(code: string, challengeId: number) {
   const session = await auth.api.getSession({
@@ -76,18 +77,7 @@ export default async function submitTest(code: string, challengeId: number) {
   return resultArray
 }
 
-export async function giveUserXP(challenge: {
-  id: number
-  createdAt: Date
-  updatedAt: Date
-  userId: string | null
-  title: string
-  description: string
-  level: number
-  boilerplate: string | null
-  tips: string | null
-  tests: string
-}) {
+export async function giveUserXP({ challenge }: { challenge: Challenge }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -99,12 +89,12 @@ export async function giveUserXP(challenge: {
   const difficulty = challenge.level
   console.log('challenge difficulty: ', difficulty)
 
-  const existingXP = await prisma.experience.findUnique({
+  const existingXP = await prisma.experience.findFirst({
     where: {
-      userId_challengeId: {
-        userId: challenge.userId!,
-        challengeId: challenge.id,
-      },
+      AND: [
+        { userId: session.user.id },
+        { challengeId: challenge.id }
+      ]
     },
   })
 
@@ -128,28 +118,19 @@ export async function giveUserXP(challenge: {
 
   const xpRecord = await prisma.experience.create({
     data: {
-      userId: challenge.userId!,
+      userId: session.user.id,
       challengeId: challenge.id,
       value: xpValue,
     },
   })
 
+  revalidatePath("/")
+
   console.log('Awarded XP record:', xpRecord)
   return xpRecord
 }
 
-export async function depleteUserXP(challenge: {
-  id: number
-  createdAt: Date
-  updatedAt: Date
-  userId: string | null
-  title: string
-  description: string
-  level: number
-  boilerplate: string | null
-  tips: string | null
-  tests: string
-}) {
+export async function depleteUserXP({ challenge }: { challenge: Challenge }) {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -163,7 +144,7 @@ export async function depleteUserXP(challenge: {
 
   const penalty = await prisma.experience.create({
     data: {
-      userId: challenge.userId!,
+      userId: session.user.id,
       challengeId: challenge.id,
       value: -70,
     },
@@ -180,6 +161,8 @@ export async function depleteUserXP(challenge: {
     totalXP! += experienceRecords[i].value
     console.log('total: ', totalXP)
   }
+
+  revalidatePath("/")
 
   return { penalty }
 }
